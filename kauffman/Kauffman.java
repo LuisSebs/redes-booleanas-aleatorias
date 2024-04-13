@@ -298,7 +298,7 @@ public class Kauffman extends PApplet {
                 this.historial[g] = nuevosNodos;
                 this.nodos = nuevosNodos;
             }
-            imprimeHistorial(); // imprime el historial en terminal
+            //imprimeHistorial(); // imprime el historial en terminal
         }
     }
 
