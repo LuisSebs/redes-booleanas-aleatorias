@@ -29,6 +29,12 @@ public class Kauffman extends PApplet {
 
     @Override
     public void draw(){
+        /* Nota: Esta implementacion es un poco inusual
+         * ya que en el historial tenemos que iterar
+         * primero por la cantidad de nodos y despues
+         * por la cantidad de generaciones y al dibujar
+         * el rectangulo primero ponemos j y después i.
+         */
         for (int i = 0; i<alto; i++){
             for (int j = 0; j < ancho; j++){
                 if (modelo.historial[j][i] == 1){
@@ -45,10 +51,16 @@ public class Kauffman extends PApplet {
 
     @Override
     public void mouseClicked() {
+        // Cambiamos el modelo para que el usuario pueda ver un patron nuevo
         this.modelo = new KauffmanModelo(alto, ancho);
         this.modelo.run();
     };
 
+    /**
+     * Representa un modelo
+     * de las redes booleanas
+     * aleatorias de Kauffman
+     */
     class KauffmanModelo{
 
         /** Numero de nodos */
@@ -75,10 +87,15 @@ public class Kauffman extends PApplet {
         /**Random */
         Random rn = new Random();
 
+        /**
+         * Constructor
+         * @param n cantidad de nodos.
+         * @param max cantidad maxima de iteraciones.
+         */
         public KauffmanModelo(int n, int max){
             this.n = n;
             this.max = max;
-            this.nodos = generaNodosALeatorios();
+            this.nodos = generaNodosAleatorios();
             this.adyacencias = generaAdyacenciasAleatorias();
             this.tablaDeVerdad = generaTablaDeVerdad();
             this.historial = new int[max][];
@@ -86,7 +103,12 @@ public class Kauffman extends PApplet {
             this.g++;
         }
 
-        public int[] generaNodosALeatorios(){
+        /**
+         * Regresa un arreglo de nodos aleatorios
+         * @return arreglo de enteros que representan nodos del modelo
+         * con valores entre 1 y 0.
+         */
+        public int[] generaNodosAleatorios(){
 
             int[] nodos = new int[n];
 
@@ -97,6 +119,11 @@ public class Kauffman extends PApplet {
             return nodos;
         }
 
+        /**
+         * Regresa un arreglo de ayacencias
+         * @return arreglo de arreglos de longitud 3
+         * que representan las adyacencias de cada nodo.
+         */
         public int[][] generaAdyacenciasAleatorias(){
             
             int[][] adyacencias = new int[n][];
@@ -117,6 +144,14 @@ public class Kauffman extends PApplet {
             return adyacencias;
         }
 
+        /**
+         * Regresa una tabla de verdad
+         * @return hashmap, las llaves son 
+         * representaciones de los numeros
+         * del 0 al 7 en binario a 3 bits,
+         * con valores aleatorios entre
+         * 1 y 0.
+         */
         public HashMap<String,Integer> generaTablaDeVerdad(){
 
             HashMap<String,Integer> hashmap = new HashMap<>();
@@ -129,6 +164,13 @@ public class Kauffman extends PApplet {
             return hashmap;
         }
 
+        /**
+         * Calcula los valores dado las
+         * adyacencias de los nodos.
+         * @return arreglo de arreglos de enteros de longitud 3
+         * que representan los valores de los nodos segun sus
+         * adyacencias.
+         */
         public int[][] calculaValores(){
 
             int[][] valores = new int[n][];
@@ -145,6 +187,12 @@ public class Kauffman extends PApplet {
             return valores;
         }
 
+        /**
+         * Calcula los nuevos nodos
+         * dado un arreglo de valores.
+         * @param valores arreglo de valores
+         * @return nuevos nodos.
+         */
         public int[] calculaNuevosNodos(int[][] valores){
 
             int[] nuevosNodos = new int[n];
@@ -161,6 +209,9 @@ public class Kauffman extends PApplet {
             return nuevosNodos;
         }
 
+        /**
+         * Imprime los nodos del modelo
+         */
         public void imprimeNodos(){
             for (int i = 0; i < n; i++){
                 int nodo = this.nodos[i];
@@ -168,6 +219,9 @@ public class Kauffman extends PApplet {
             }
         }
 
+        /**
+         * Imprime las adyacencias de los nodos
+         */
         public void imprimeAdyacencias(){
             for (int i = 0; i < n; i++){
                 String resultado = "";
@@ -178,6 +232,9 @@ public class Kauffman extends PApplet {
             }
         }
 
+        /**
+         * Imprime la tabla de verdad
+         */
         public void imprimeTablaDeVerdad(){
             // Laves 
             String[] llaves = {"000","001","010","011","100","101","110","111",};
@@ -187,6 +244,9 @@ public class Kauffman extends PApplet {
             }
         }
 
+        /**
+         * Imprime el historial
+         */
         public void imprimeHistorial(){
             for (int i = 0; i<n; i++){
                 String resultado = "";
@@ -197,6 +257,11 @@ public class Kauffman extends PApplet {
             }
         }
 
+        /**
+         * Imprime el historial pero cambia
+         * los 1's por espacios en blanco para
+         * ver el patron generado.
+         */
         public void imprimeHistorialPatron(){
             for (int i = 0; i<n; i++){
                 String resultado = "";
@@ -208,6 +273,10 @@ public class Kauffman extends PApplet {
             }
         }
 
+        /**
+         * Imprime un arreglo de valores.
+         * @param valores
+         */
         public void imprimeValores(int[][] valores){
             for (int i = 0; i < n; i++){
                 String resultado = "";
@@ -219,6 +288,9 @@ public class Kauffman extends PApplet {
             }
         }
 
+        /**
+         * Ejecuta la red booleana
+         */
         public void run(){
             for (; g<max; g++){
                 int[][] valores = calculaValores();
@@ -226,7 +298,7 @@ public class Kauffman extends PApplet {
                 this.historial[g] = nuevosNodos;
                 this.nodos = nuevosNodos;
             }
-            imprimeHistorial();
+            imprimeHistorial(); // imprime el historial en terminal
         }
     }
 
